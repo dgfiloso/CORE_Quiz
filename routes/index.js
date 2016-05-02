@@ -8,8 +8,10 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-// router.get('/question', quizController.question);
-// router.get('/check', quizController.check);
+// Autoload de rutas que usen :quizId
+router.param('quizId', quizController.load);	// autoload :quizId
+
+// Ruta a creditos
 router.get('/author', quizController.author);
 
 // Definición de rutas de /quizzes
