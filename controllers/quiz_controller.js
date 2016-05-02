@@ -36,6 +36,24 @@ exports.check = function(req, res) {
 	res.render('quizzes/result', {quiz: req.quiz, result: result, answer: answer});
 };
 
+// GET /quizzes/new
+exports.new = function(req, res, next) {
+	var quiz = models.Quiz.build({question: "", answer: ""});
+	res.render('quizzes/new', {quiz: quiz});
+};
+
+// POST /quizzes/creat
+exports.create = function(req, res, next) {
+	var quiz = models.Quiz.build({ 	question: 	req.body.quiz.question,
+									answer: 	req.body.quiz.answer });
+	// guarda en DB los campos pregunta y respuesta de quiz
+	quiz.save({fields: 	["question", "answer"]})
+	.then(function(quiz) {
+		res.redirect('/quizzes');			//res.redirect:
+	})										// Redirección HTTP a lista de preguntas
+	.catch(function(error) { next(error) });
+};
+
 // GET /author
 exports.author = function(req, res, next){
 	res.render('author', {autor: 'David González'});
