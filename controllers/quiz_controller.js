@@ -99,6 +99,18 @@ exports.update = function(req, res, next) {
 	});
 };
 
+// DELETE /quizzes:id
+exports.destroy = function(req, res, next) {
+	req.quiz.destroy()
+	.then(function() {
+		req.flash('success', 'Quiz borrado con éxito.');
+		res.redirect('/quizzes');
+	})
+	.catch(function(error) {
+		req.flash('error', 'Error al borrar el Quiz: '+error.message);
+	});
+};
+
 // GET /author
 exports.author = function(req, res, next){
 	res.render('author', {autor: 'David González'});
