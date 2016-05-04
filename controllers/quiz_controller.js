@@ -17,11 +17,23 @@ exports.load = function(req, res, next, quizId) {
 
 // GET /quizzes
 exports.index = function(req, res, next) {
-	models.Quiz.findAll()
-	.then(function(quizzes) {
-		res.render('quizzes/index.ejs', { quizzes: quizzes});
-	})
-	.catch(function(error) { next(error) });
+	if(req.query.search !== undefined){
+		var search = req.query.search.split(' ');
+		search = search.join('%');
+		models.Quiz.findAll({order: 'question', where: {question: {$like : "%"+search+"%" }}})
+		.then(function(quizzes) {
+
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) { next(error) });
+
+	} else {
+		models.Quiz.findAll()
+		.then(function(quizzes) {
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) { next(error) });
+	}
 };
 
 // GET /quizzes/:id
