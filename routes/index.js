@@ -4,6 +4,7 @@ var router = express.Router();
 var quizController = require('../controllers/quiz_controller');
 var commentController = require('../controllers/comment_controller');
 var userController = require('../controllers/user_controller');
+var sessionController = require('../controllers/session_controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -11,11 +12,16 @@ router.get('/', function(req, res, next) {
 });
 
 // Autoload de rutas que usen :quizId
-router.param('quizId', quizController.load);	// autoload :quizId
-router.param('userId', userController.load);	// autoload :userId
+router.param('quizId', 								quizController.load);	// autoload :quizId
+router.param('userId', 								userController.load);	// autoload :userId
+
+// Definicion de rutas de sesion
+router.get('/session',								sessionController.new);
+router.post('/session',								sessionController.create);
+router.delete('/session',							sessionController.destroy);
 
 // Ruta a creditos
-router.get('/author', quizController.author);
+router.get('/author', 								quizController.author);
 
 // Definición de rutas de /quizzes
 router.get('/quizzes.:format?',						quizController.index);
