@@ -52,7 +52,6 @@ exports.show = function(req, res, next) {
 	} else if (req.params.format === 'json') {
 		res.send(JSON.stringify(req.quiz));
 	}
-	
 };
 
 // GET /quizzes/:id/check
@@ -70,10 +69,15 @@ exports.new = function(req, res, next) {
 
 // POST /quizzes/create
 exports.create = function(req, res, next) {
-	var quiz = models.Quiz.build({ 	question: 	req.body.quiz.question,
-									answer: 	req.body.quiz.answer });
+
+	var authorId = req.session.user && req.session.user.id || 0;
+
+  	var quiz = models.Quiz.build({ question: req.body.quiz.question, 
+  	                             answer:   req.body.quiz.answer,
+                                 AuthorId: authorId } );
+	
 	// guarda en DB los campos pregunta y respuesta de quiz
-	quiz.save({fields: 	["question", "answer"]})
+	quiz.save({fields: 	["question", "answer", "AuthorId"]})
 	.then(function(quiz) {
 		req.flash('success', 'Quiz creado con éxito.');
 		res.redirect('/quizzes');			//res.redirect:
