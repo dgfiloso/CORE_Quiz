@@ -12,15 +12,15 @@
 </p>
 
 <p>
-  <a href="/users/<%= user.id %>/edit"> 
-    <button type="button"> Editar </button>
-  </a>
-  <a href="/users/<%= user.id %>?_method=DELETE"> 
-    <button type="button"
-            onClick="return confirm('Borrar cuenta: <%= user.username %>');">
+  <% if (session.user) { %>
+    <a href="/users/<%= user.id %>/edit"><button type="button"> Editar </button></a>
+    <a href="/users/<%= user.id %>?_method=DELETE"> 
+      <button type="button" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
        Borrar 
-    </button>
-  </a>
+      </button>
+    </a>
+  <% } %>
+  
 </p>
 
 <a href="/users"> 
