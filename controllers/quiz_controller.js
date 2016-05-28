@@ -69,7 +69,7 @@ exports.index = function(req, res, next) {
 exports.show = function(req, res, next) {
 	var answer = req.query.answer || "";
 	if((req.params.format === undefined) || (req.params.format === 'html')) {
-		res.render('quizzes/show', {quiz: req.quiz, answer: answer});
+		res.render('quizzes/show', {quiz: req.quiz, answer: answer, users: req.users});
 	} else if (req.params.format === 'json') {
 		res.send(JSON.stringify(req.quiz));
 	}
