@@ -96,9 +96,9 @@ exports.create = function(req, res, next) {
 
 	var authorId = req.session.user && req.session.user.id || 0;
 
-  	var quiz = models.Quiz.build({ question: req.body.quiz.question, 
-  	                             answer:   req.body.quiz.answer,
-                                 AuthorId: authorId } );
+  	var quiz = { question: req.body.quiz.question, 
+  	             answer:   req.body.quiz.answer,
+                 AuthorId: authorId };
 	
 	// Guarda en la tabla Quizzes el nuevo quiz.
     models.Quiz.create(quiz)
@@ -185,22 +185,23 @@ exports.update = function(req, res, next) {
     });
 };
 
-// DELETE /quizzes:id
+// DELETE /quizzes/:id
 exports.destroy = function(req, res, next) {
 
-	 // Borrar la imagen de Cloudinary (Ignoro resultado)
+    // Borrar la imagen de Cloudinary (Ignoro resultado)
     if (req.quiz.Attachment) {
         cloudinary.api.delete_resources(req.quiz.Attachment.public_id);
     }
-    
-	req.quiz.destroy()
-	.then(function() {
-		req.flash('success', 'Quiz borrado con éxito.');
-		res.redirect('/quizzes');
-	})
-	.catch(function(error) {
-		req.flash('error', 'Error al borrar el Quiz: '+error.message);
-	});
+
+    req.quiz.destroy()
+      .then( function() {
+      req.flash('success', 'Quiz borrado con éxito.');
+        res.redirect('/quizzes');
+      })
+      .catch(function(error){
+      req.flash('error', 'Error al editar el Quiz: '+error.message);
+        next(error);
+      });
 };
 
 // GET /author
